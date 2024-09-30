@@ -2,15 +2,21 @@ const express = require("express");
 
 const app = express();
 
-app.use('/',(req, res, next)=>{
+app.get('/',(req, res, next)=>{
     res.send("Hello from dashboard");
 });
 
-app.use('/test',(req, res, next)=>{
-    res.send("server testing");
-});
+// app.get('/te(st)+1',(req, res, next)=>{
+//     res.send("server testing");
+// });
 
-app.use('/hello',(req, res, next)=>{
+ app.get(/.*test$/,(req, res, next)=>{
+    console.log();
+    res.send({firstName: "somesh", lastName: "tripathi"})
+ })
+
+app.post('/hello/:userId/:userName/:password',(req, res, next)=>{
+    console.log(req.params);
     res.send("Hello from server");
 });
 
