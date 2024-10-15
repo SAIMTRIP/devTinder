@@ -1,23 +1,26 @@
 const express = require("express");
-const {connectDB} = require("./config/database");
+const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+
+const { connectDB } = require("./config/database");
 const User = require("./models/user");
+const { validateSignUpData } = require("./utils/validation");
+const { userAuth } = require("./middlewares/auth");
+const { authRouter } = require("./routes/auth");
+const { profileRouter } = require("./routes/profile");
+const { requestRouter } = require("./routes/request");
 
 const app = express();
 
 app.use(express.json());
 
-app.post('/signup', async (req, res, next)=>{
-    // Creating a new instance of User model
-    console.log(req.body);
-    const user = new User(req.body);
-    try{
-        await user.save();
-        res.send("User created successfully");
-    }catch{
-        res.status(400).send("Error creating User:"+ err.message);
-    }
-    
-  })
+app.use(cookieParser());
+
+app.use('/', authRouter);
+app.use('/', profileRouter);
+app.use('/', requestRouter)
+
 
 connectDB()
   .then(() => {
@@ -29,5 +32,3 @@ connectDB()
   .catch((err) => {
     console.log("Database can not be connected::", err);
   });
-
-  
