@@ -5,6 +5,7 @@ const User = require("../models/user");
 
 const requestRouter = express.Router();
 
+//API to send connection request
 requestRouter.post(
   "/request/send/:status/:userId",
   userAuth,
@@ -48,5 +49,44 @@ requestRouter.post(
     }
   }
 );
+
+// API to accept connection request
+requestRouter.post('/request/review/:status/:requestId',userAuth, async(req, res, next)=>{
+  try{
+    // toUserId should be logged in id
+    // status should be accepted or rejected
+    // requestId should be in DB
+    const loggedInUser = req.user;
+    const {status, requestId} = req.params;
+    const allowedStatus=["rejected", "accepted"];
+    const isAllowedStatus = allowedStatus.includes(status);
+    if(!isAllowedStatus){
+      throw new Error("Status is not allowed: "+status);
+    }
+
+    const connectionRequest = await ConnectionRequest.findOne({
+      _id: requestId,
+      toUserId: loggedInUser._id,
+      status: 'interested'
+    });
+
+    if(!connectionRequest){
+      return res.status(404).send("Request is not found");
+    }
+
+    connectionRequest.status = status;
+
+    const data = await connectionRequest.save();
+
+    if(!data){
+      throw new Error("Error in saving data");
+    }
+
+    res.json({message: `Request is ${status} successfully`});
+
+  }catch(err){
+    res.status(400).send("Error: "+err.message);
+  }
+})
 
 module.exports = { requestRouter };

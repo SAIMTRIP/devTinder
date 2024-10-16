@@ -10,13 +10,15 @@
 
 
 ## connection request router
+# send request
 1. POST: /request/send/interested/:userId 
 2. POST: /request/send/ignored/:userId
+# review request
 3. POST: /request/review/accepted/:userId
 4. POST: /request/review/rejected/:userId
 
 ## userRouter
 1. GET: /user/connections
-2. GET: /user/requests
+2. GET: /user/requests/recieved
 3. GET: /user/feed
 
