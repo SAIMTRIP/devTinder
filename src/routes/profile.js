@@ -104,18 +104,18 @@ profileRouter.patch("/user/:userId", async (req, res, next) => {
 });
 
 //Find feed
-profileRouter.get("/feed", userAuth, async (req, res, next) => {
-  try {
-    const users = await User.find({});
-    if (users.length === 0) {
-      res.status(404).send("Feed is not available !!!");
-    } else {
-      res.send(users);
-    }
-  } catch (err) {
-    res.status(500).send("Something went wrong!!!");
-  }
-});
+// profileRouter.get("/feed", userAuth, async (req, res, next) => {
+//   try {
+//     const users = await User.find({});
+//     if (users.length === 0) {
+//       res.status(404).send("Feed is not available !!!");
+//     } else {
+//       res.send(users);
+//     }
+//   } catch (err) {
+//     res.status(500).send("Something went wrong!!!");
+//   }
+// });
 
 // Find user by EmailId
 profileRouter.get("/user", async (req, res, next) => {
